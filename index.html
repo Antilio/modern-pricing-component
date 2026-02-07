@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Pricing-Cards - Functional</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 50px 0;
+      }
+
+      .pricing-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px 30px;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        border: 3px solid transparent;
+      }
+
+      .pricing-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .pricing-card.active {
+        border-color: #667eea;
+        transform: translateY(-15px) scale(1.05);
+        box-shadow: 0 40px 80px rgba(102, 126, 234, 0.4);
+      }
+
+      .pricing-card.pro {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .pricing-card.pro.active {
+        border-color: #ffd700;
+        box-shadow: 0 40px 80px rgba(255, 215, 0, 0.4);
+      }
+
+      .plan-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .plan-subtitle {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+      }
+
+      .pricing-card.pro .plan-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .price {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin: 20px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+      }
+
+      .price .currency {
+        font-size: 1.5rem;
+        vertical-align: top;
+      }
+
+      .price .period {
+        font-size: 1rem;
+        color: #6c757d;
+        font-weight: 400;
+      }
+
+      .pricing-card.pro .price .period {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .features {
+        list-style: none;
+        margin: 30px 0;
+        text-align: left;
+      }
+
+      .features li {
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .pricing-card.pro .features li {
+        border-bottom-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .features li:last-child {
+        border-bottom: none;
+      }
+
+      .features i {
+        font-size: 1.2rem;
+      }
+
+      .features .bi-check-circle-fill {
+        color: #28a745;
+      }
+
+      .pricing-card.pro .features .bi-check-circle-fill {
+        color: #ffd700;
+      }
+
+      .features .bi-x-circle-fill {
+        color: #dc3545;
+      }
+
+      .btn-select {
+        width: 100%;
+        padding: 15px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .btn-select:hover {
+        transform: scale(1.05);
+      }
+
+      .pricing-card:not(.pro) .btn-select {
+        background: transparent;
+        border-color: #667eea;
+        color: #667eea;
+      }
+
+      .pricing-card:not(.pro) .btn-select:hover,
+      .pricing-card:not(.pro).active .btn-select {
+        background: #667eea;
+        color: white;
+      }
+
+      .pricing-card.pro .btn-select {
+        background: white;
+        color: #667eea;
+      }
+
+      .pricing-card.pro .btn-select:hover {
+        background: #ffd700;
+        color: #333;
+      }
+
+      /* Toggle Switch */
+      .toggle-container {
+        background: white;
+        padding: 20px;
+        border-radius: 50px;
+        display: inline-flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 60px;
+        height: 30px;
+        background: #ddd;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .toggle-switch.active {
+        background: #667eea;
+      }
+
+      .toggle-switch::after {
+        content: "";
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        background: white;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        transition: transform 0.3s;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .toggle-switch.active::after {
+        transform: translateX(30px);
+      }
+
+      .toggle-label {
+        font-weight: 600;
+        color: #333;
+        cursor: pointer;
+      }
+
+      .toggle-label.active {
+        color: #667eea;
+      }
+
+      .save-badge {
+        background: #28a745;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-left: 10px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .save-badge.show {
+        opacity: 1;
+      }
+
+      /* Popular Badge */
+      .popular-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: #ffd700;
+        color: #333;
+        padding: 10px 30px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        transform: rotate(45deg) translate(30px, -10px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Selected Message */
+      .selection-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #28a745;
+        color: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transform: translateX(400px);
+        transition: transform 0.4s ease;
+        z-index: 1000;
+      }
+
+      .selection-message.show {
+        transform: translateX(0);
+      }
+
+      /* Animations */
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .pricing-card.selected-plan {
+        animation: pulse 2s infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Selection Message -->
+    <div id="selectionMessage" class="selection-message">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <span id="messageText">The plan was chosen!</span>
+    </div>
+
+    <div class="container">
+      <!-- Header -->
+      <div class="text-center mb-5">
+        <h1 class="text-white fw-bold mb-3 display-4">Choose Your Plan</h1>
+        <p class="text-white-50 mb-4">
+          Start for free or upgrade for more features.
+        </p>
+
+        <!-- Monthly/Yearly Toggle -->
+        <div class="toggle-container">
+          <span class="toggle-label active" onclick="setBilling('monthly')"
+            >Monthly</span
+          >
+          <div
+            class="toggle-switch"
+            id="billingToggle"
+            onclick="toggleBilling()"
+          ></div>
+          <span class="toggle-label" onclick="setBilling('yearly')">
+            Yearly
+            <span class="save-badge" id="saveBadge">Save 20%</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <!-- Card 1 - Free -->
+        <div class="col-lg-5 col-md-6">
+          <div class="pricing-card" id="freeCard" onclick="selectPlan('free')">
+            <div class="plan-name">Free</div>
+            <div class="plan-subtitle">For Freelancers</div>
+
+            <div class="price">
+              <span class="currency">$</span>
+              <span id="freePrice">0</span>
+              <span class="period" id="freePeriod">/month</span>
+            </div>
+
+            <ul class="features">
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>1 User</span>
+              </li>
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>10 Projects</span>
+              </li>
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>5GB Storage</span>
+              </li>
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Email Support</span>
+              </li>
+              <li>
+                <i class="bi bi-x-circle-fill"></i>
+                <span style="opacity: 0.5">API Access</span>
+              </li>
+              <li>
+                <i class="bi bi-x-circle-fill"></i>
+                <span style="opacity: 0.5">Custom Domain</span>
+              </li>
+            </ul>
+
+            <button
+              class="btn btn-select"
+              onclick="
+                event.stopPropagation();
+                choosePlan('free');
+              "
+            >
+              Start Free
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2 - Pro -->
+        <div class="col-lg-5 col-md-6">
+          <div
+            class="pricing-card pro"
+            id="proCard"
+            onclick="selectPlan('pro')"
+          >
+            <div class="popular-badge">Popular</div>
+
+            <div class="plan-name">Pro</div>
+            <div class="plan-subtitle">For Teams & Biznese</div>
+
+            <div class="price">
+              <span class="currency">$</span>
+              <span id="proPrice">29</span>
+              <span class="period" id="proPeriod">/month</span>
+            </div>
+
+            <ul class="features">
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Unlimited Users</span>
+              </li>
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Unlimited Projects</span>
+              </li>
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>100GB Storage</span>
+              </li>
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>24/7 Priority Support</span>
+              </li>
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Full API Access</span>
+              </li>
+              <li>
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Custom Domain</span>
+              </li>
+            </ul>
+
+            <button
+              class="btn btn-select"
+              onclick="
+                event.stopPropagation();
+                choosePlan('pro');
+              "
+            >
+              Upgrade Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selected Plan Info -->
+      <div class="text-center mt-5">
+        <div id="selectedPlanInfo" class="text-white" style="display: none">
+          <h4>
+            Selected plan:
+
+            <span id="selectedPlanName" class="fw-bold text-warning"></span>
+          </h4>
+          <p class="mb-0">
+            Price: <span id="selectedPlanPrice" class="fw-bold"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      // Global variables
+      let currentBilling = "monthly";
+      let selectedPlan = null;
+
+      const prices = {
+        free: { monthly: 0, yearly: 0 },
+        pro: { monthly: 29, yearly: 278 }, // 20% discount for yearly
+      };
+
+      // Toggle Monthly/Yearly
+      function toggleBilling() {
+        const newBilling = currentBilling === "monthly" ? "yearly" : "monthly";
+        setBilling(newBilling);
+      }
+
+      function setBilling(billing) {
+        currentBilling = billing;
+        const toggle = document.getElementById("billingToggle");
+        const labels = document.querySelectorAll(".toggle-label");
+        const saveBadge = document.getElementById("saveBadge");
+
+        if (billing === "yearly") {
+          toggle.classList.add("active");
+          labels[0].classList.remove("active");
+          labels[1].classList.add("active");
+          saveBadge.classList.add("show");
+        } else {
+          toggle.classList.remove("active");
+          labels[0].classList.add("active");
+          labels[1].classList.remove("active");
+          saveBadge.classList.remove("show");
+        }
+
+        updatePrices();
+      }
+
+      // Update prices with animations
+      function updatePrices() {
+        const freePrice = document.getElementById("freePrice");
+        const proPrice = document.getElementById("proPrice");
+        const freePeriod = document.getElementById("freePeriod");
+        const proPeriod = document.getElementById("proPeriod");
+
+        // Animation of nr
+        animateNumber(freePrice, prices.free[currentBilling]);
+        animateNumber(proPrice, prices.pro[currentBilling]);
+
+        // Update period
+        freePeriod.textContent =
+          currentBilling === "monthly" ? "/month" : "/year";
+        proPeriod.textContent =
+          currentBilling === "monthly" ? "/month" : "/year";
+      }
+
+      function animateNumber(element, target) {
+        const start = parseInt(element.textContent);
+        const duration = 500;
+        const startTime = performance.now();
+
+        function update(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+
+          const current = Math.round(start + (target - start) * easeProgress);
+          element.textContent = current;
+
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          }
+        }
+
+        requestAnimationFrame(update);
+      }
+
+      // Select plan (when click the card)
+      function selectPlan(plan) {
+        // hide klas active from both
+        document.getElementById("freeCard").classList.remove("active");
+        document.getElementById("proCard").classList.remove("active");
+
+        // Add the active class to the selected one
+        document.getElementById(plan + "Card").classList.add("active");
+
+        selectedPlan = plan;
+        updateSelectedInfo();
+
+        // Save in localStorage
+        localStorage.setItem("selectedPlan", plan);
+        localStorage.setItem("billingType", currentBilling);
+      }
+
+      // Choose plan (when click button)
+      function choosePlan(plan) {
+        selectPlan(plan);
+
+        const planNames = {
+          free: "Free Plan",
+          pro: "Pro Plan",
+        };
+
+        const price = prices[plan][currentBilling];
+        const period = currentBilling === "monthly" ? "month" : "year";
+
+        // Show the message
+        showMessage(`You chose ${planNames[plan]} for $${price}/${period}!`);
+
+        // Simulate redirect or action
+        console.log("Selected plan:", {
+          plan: plan,
+          billing: currentBilling,
+          price: price,
+          timestamp: new Date().toISOString(),
+        });
+
+        // Here you can add a redirect to the checkout
+        // window.location.href = `/checkout?plan=${plan}&billing=${currentBilling}`;
+      }
+
+      // Show the message
+      function showMessage(text) {
+        const message = document.getElementById("selectionMessage");
+        const messageText = document.getElementById("messageText");
+
+        messageText.textContent = text;
+        message.classList.add("show");
+
+        setTimeout(() => {
+          message.classList.remove("show");
+        }, 3000);
+      }
+
+      // Update info panel
+      function updateSelectedInfo() {
+        const info = document.getElementById("selectedPlanInfo");
+        const name = document.getElementById("selectedPlanName");
+        const price = document.getElementById("selectedPlanPrice");
+
+        if (selectedPlan) {
+          info.style.display = "block";
+          name.textContent = selectedPlan === "free" ? "Free" : "Pro";
+          const planPrice = prices[selectedPlan][currentBilling];
+          const period = currentBilling === "monthly" ? "month" : "year";
+          price.textContent = `$${planPrice}/${period}`;
+        }
+      }
+
+      // Load saved preferences
+      window.addEventListener("load", () => {
+        const savedPlan = localStorage.getItem("selectedPlan");
+        const savedBilling = localStorage.getItem("billingType");
+
+        if (savedBilling) {
+          setBilling(savedBilling);
+        }
+
+        if (savedPlan) {
+          setTimeout(() => selectPlan(savedPlan), 500);
+        }
+      });
+
+      // Keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") {
+          selectPlan("free");
+        } else if (e.key === "ArrowRight") {
+          selectPlan("pro");
+        } else if (e.key === "Enter" && selectedPlan) {
+          choosePlan(selectedPlan);
+        }
+      });
+    </script>
+  </body>
+</html>
